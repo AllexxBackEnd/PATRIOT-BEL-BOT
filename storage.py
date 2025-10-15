@@ -50,7 +50,7 @@ quiz_questions = [
     },
     {
         "question": "Какая школа названа именем А. Сухомбаева?",
-        "options": ["option 1", "option 2", "option 3", "option 4"],
+        "options": ["СШ 21", "СШ 16", "СШ 40", "СШ 20"],
         "correct_answer": 1
     },
     {
