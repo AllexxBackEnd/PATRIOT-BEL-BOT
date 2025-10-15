@@ -1,8 +1,7 @@
 from aiogram.types import Message, ReplyKeyboardRemove
+
 import storage
-from configurations.keyboards import (
-    heroes_keyboard,
-)
+from configurations.keyboards import heroes_keyboard
 
 
 async def heroes_button(message: Message):

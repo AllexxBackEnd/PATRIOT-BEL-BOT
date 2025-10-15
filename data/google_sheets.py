@@ -1,7 +1,9 @@
-import gspread
-from google.oauth2.service_account import Credentials
 import datetime
 import logging
+
+import gspread
+from google.oauth2.service_account import Credentials
+
 from config import GOOGLE_SHEETS_CREDENTIALS, SPREADSHEET_ID
 
 # Настройки
@@ -19,7 +21,7 @@ class GoogleSheetsManager:
         self.connect()
 
     def connect(self):
-        """Подключение к Google Таблицам"""
+        """Подключение к Google Таблицам."""
         try:
             creds = Credentials.from_service_account_file(
                 SERVICE_ACCOUNT_FILE, scopes=SCOPES

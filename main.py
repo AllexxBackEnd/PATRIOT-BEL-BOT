@@ -1,8 +1,3 @@
-"""
-Главный модуль бота PATRIOT BOT.
-Обрабатывает команды, кнопки меню и управляет состояниями викторины.
-"""
-
 import asyncio
 import os
 
@@ -10,37 +5,36 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
-# Импорт модулей проекта
+from commands.main_menu_command import show_main_menu
+from commands.start import process_start_command
+from commands.unknown_message import unknown_message
+from config import BOT_TOKEN
 from configurations.callbacks import (
     handle_hero_quiz_selection,
-    handle_main_menu,
     handle_heroes_pagination,
-    start_hero_quiz_mode
-                                      )
+    handle_main_menu,
+    start_hero_quiz_mode,
+)
 from configurations.quiz_manager import HeroQuizStates
-from config import BOT_TOKEN
 from logs.logging_setup import setup_logger
+from user_panel.hero_quiz_handler import (
+    cancel_hero_quiz,
+    handle_hero_quiz_answer,
+)
 from user_panel.heroes import heroes_button
 from user_panel.information import information_button
 from user_panel.leaderboard import show_leaderboard
 from user_panel.quiz_handler import (
-    quiz_button,
-    handle_quiz_answer,
+    QuizStates,
     cancel_quiz,
-    start_practice_mode,
-    start_competitive_mode,
+    handle_quiz_answer,
+    process_educational_info,
     process_first_name,
     process_last_name,
-    process_educational_info,
-    QuizStates,
+    quiz_button,
+    start_competitive_mode,
+    start_practice_mode,
 )
-from user_panel.hero_quiz_handler import (
-    handle_hero_quiz_answer,
-    cancel_hero_quiz,
-)
-from commands.start import process_start_command
-from commands.unknown_message import unknown_message
-from commands.main_menu_command import show_main_menu
 
 
 # Настройка логирования

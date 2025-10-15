@@ -1,12 +1,13 @@
+import asyncio
+import logging
+
 from aiogram import types
-from configurations.keyboards import (get_main_keyboard,
-                                      create_heroes_keyboard)
 from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardRemove
-import logging
-import asyncio
-from configurations.quiz_manager import HeroQuizManager, HeroQuizStates
+
 import storage
+from configurations.keyboards import create_heroes_keyboard, get_main_keyboard
+from configurations.quiz_manager import HeroQuizManager, HeroQuizStates
 from user_panel.hero_quiz_handler import (create_heroes_quiz_keyboard,
                                           send_hero_question)
 
@@ -81,19 +82,18 @@ async def start_hero_quiz_mode(message: types.Message, state: FSMContext):
     await state.set_state(HeroQuizStates.choosing_hero_quiz)
 
     await message.answer(
-        "🎖️ *Герои Великой Отечественной войны*\n\n",
+        "🎖️ *Викторины по героям*\n\n"
+        "Выберите героя для прохождения тренировочной викторины:\n"
+        "• 5 случайных вопросов\n"
+        "• Только тренировочный режим\n"
+        "• Можно проходить много раз\n\n",
         reply_markup=ReplyKeyboardRemove(),
         parse_mode="Markdown",
     )
 
     # Затем отправляем сообщение с клавиатурой выбора героев
     await message.answer(
-        "🎖️ *Викторины по героям*\n\n"
-        "Выберите героя для прохождения тренировочной викторины:\n"
-        "• 5 случайных вопросов\n"
-        "• Только тренировочный режим\n"
-        "• Можно проходить много раз\n\n"
-        f"📖 *Всего героев: {len(storage.HERO_NAMES) + 1}*\n"
+        f"📖 *Всего героев: {len(storage.HERO_NAMES)}*\n"
         "📄 Используйте кнопки для навигации",
         reply_markup=create_heroes_quiz_keyboard(0),
         parse_mode="Markdown",

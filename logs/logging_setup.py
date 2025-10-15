@@ -5,12 +5,7 @@ from logging.handlers import RotatingFileHandler
 
 
 def setup_logger():
-    """
-    Настраивает и возвращает логгер с ротацией файлов
-
-    Returns:
-        logging.Logger: Настроенный логгер
-    """
+    """Настраивает и возвращает логгер с ротацией файлов."""
     # Создаем папку для логов если ее нет
     log_dir = "logs"
     if not os.path.exists(log_dir):

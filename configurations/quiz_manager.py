@@ -1,6 +1,6 @@
-from aiogram.fsm.state import State, StatesGroup
-
 import random
+
+from aiogram.fsm.state import State, StatesGroup
 
 import storage
 

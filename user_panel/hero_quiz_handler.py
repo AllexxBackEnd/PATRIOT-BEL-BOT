@@ -7,9 +7,9 @@ from aiogram.types import (
     ReplyKeyboardMarkup,
 )
 
-from configurations.quiz_manager import HeroQuizManager
 import storage
 from configurations.keyboards import get_main_keyboard
+from configurations.quiz_manager import HeroQuizManager
 
 
 hero_quiz_manager = HeroQuizManager()

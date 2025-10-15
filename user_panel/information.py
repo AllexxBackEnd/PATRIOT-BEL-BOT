@@ -1,4 +1,3 @@
-"""Обработчик кнопки '⚙️ Информация о проекте'"""
 from aiogram.types import Message
 
 from configurations.keyboards import get_cancel_keyboard
