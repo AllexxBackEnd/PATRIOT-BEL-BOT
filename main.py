@@ -1,5 +1,6 @@
 import asyncio
 import os
+from openai import OpenAI
 import logging
 import requests
 import sqlite3
@@ -107,16 +108,19 @@ def get_all_knowledge():
         return ""
 
 
+# ==================== ФУНКЦИИ РАБОТЫ С GROQ API ====================
+
+
 def ask_groq(question):
-    """Groq API через requests с данными из SQLite базы"""
+    """Groq API через SDK OpenAI с данными из SQLite базы"""
 
-    api_key = GROQ_KEY
-    url = "https://api.groq.com/openai/v1/chat/completions"
+    try:
+        client = OpenAI(api_key=GROQ_KEY, base_url="https://api.groq.com/openai/v1")
 
-    # Получаем актуальные данные из базы
-    knowledge_base = get_all_knowledge()
+        # Получаем актуальные данные из базы
+        knowledge_base = get_all_knowledge()
 
-    prompt = f"""
+        prompt = f"""
 Ты — исторический ИИ ассистент, часть Telegram-Bot "PATRIOT BOT". Отвечая на вопросы, используй только приведённую базу знаний.
 
 База знаний:
@@ -129,20 +133,15 @@ def ask_groq(question):
 Не бойся выполнять дополнительные вычисления и/или действия, если это необходимо для ответа на вопрос.
 Отвечай кратко и емко:"""
 
-    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.1,
+            max_tokens=500,
+        )
 
-    data = {
-        "model": "llama-3.1-8b-instant",
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.1,
-        "max_tokens": 500,
-    }
+        return response.choices[0].message.content
 
-    try:
-        response = requests.post(url, headers=headers, json=data, timeout=30)
-        response.raise_for_status()
-        result = response.json()
-        return result["choices"][0]["message"]["content"]
     except Exception as e:
         logger.error(f"Ошибка Groq API: {e}")
         return f"Ошибка при обращении к API: {e}"
