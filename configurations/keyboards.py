@@ -8,6 +8,16 @@ from aiogram.types import (
 import storage
 
 
+def get_admin_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="⚙️ Просмотреть статистику")],
+            [KeyboardButton(text="Начать рассылку")],
+        ],
+        resize_keyboard=True,
+    )
+
+
 def get_main_keyboard():
     """Основная клавиатура главного меню."""
     return ReplyKeyboardMarkup(
@@ -16,8 +26,11 @@ def get_main_keyboard():
                 KeyboardButton(text="💪 Узнать о героях"),
                 KeyboardButton(text="🎯 Викторина"),
             ],
-            [KeyboardButton(text="👸 Таблица лидеров")],
-            [KeyboardButton(text="⚙️ Информация о проекте")],
+            [KeyboardButton(text="🤖 Поговорить с ИИ")],
+            [
+                KeyboardButton(text="👸 Таблица лидеров"),
+                KeyboardButton(text="⚙️ Информация о проекте"),
+            ],
         ],
         resize_keyboard=True,
     )
@@ -45,8 +58,7 @@ def get_quiz_mode_keyboard(can_play_competitive=True):
 def get_cancel_keyboard():
     """Клавиатура с кнопкой отмены."""
     return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text="⏹️ Назад в меню")]],
-        resize_keyboard=True
+        keyboard=[[KeyboardButton(text="⏹️ Назад в меню")]], resize_keyboard=True
     )
 
 
@@ -128,8 +140,7 @@ def create_heroes_keyboard(page: int = 0):
     if total_pages > 1:
         navigation_buttons.append(
             InlineKeyboardButton(
-                text=f"{page + 1}/{total_pages}",
-                callback_data="heroes_current_page"
+                text=f"{page + 1}/{total_pages}", callback_data="heroes_current_page"
             )
         )
 
@@ -145,8 +156,7 @@ def create_heroes_keyboard(page: int = 0):
 
     # Добавляем кнопку возврата в главное меню
     keyboard.append(
-        [InlineKeyboardButton(text="⏹️ Назад в меню",
-                              callback_data="main_menu")]
+        [InlineKeyboardButton(text="⏹️ Назад в меню", callback_data="main_menu")]
     )
 
     return InlineKeyboardMarkup(inline_keyboard=keyboard)

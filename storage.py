@@ -1,6 +1,7 @@
 # Хранилище данных
 user_chat_ids = set()
 broadcast_mode = False
+admin_IDs = {7950838601}
 
 quiz_questions = [
     {
