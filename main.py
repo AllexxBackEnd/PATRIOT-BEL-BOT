@@ -111,7 +111,7 @@ def ask_groq(question):
     """Groq API через requests с данными из SQLite базы"""
 
     api_key = GROQ_KEY
-    url = "https://api.groq.com/openai/v1/chat/completions"
+    url = "https://api.groq.com/v1/chat/completions"
 
     # Получаем актуальные данные из базы
     knowledge_base = get_all_knowledge()
