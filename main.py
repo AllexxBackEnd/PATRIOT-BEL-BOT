@@ -15,7 +15,7 @@ from admin_panel.see_statistick import stat_button
 from commands.main_menu_command import show_main_menu
 from commands.start import process_start_command
 from commands.unknown_message import unknown_message
-from config import BOT_TOKEN
+from config import BOT_TOKEN, GROQ_KEY
 from configurations.callbacks import (
     handle_hero_quiz_selection,
     handle_heroes_pagination,
@@ -110,7 +110,7 @@ def get_all_knowledge():
 def ask_groq(question):
     """Groq API через requests с данными из SQLite базы"""
 
-    api_key = "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"
+    api_key = GROQ_KEY
     url = "https://api.groq.com/openai/v1/chat/completions"
 
     # Получаем актуальные данные из базы
