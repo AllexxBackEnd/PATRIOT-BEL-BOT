@@ -1,15 +1,18 @@
 import asyncio
 import os
 from openai import OpenAI
-import logging
-import requests
 import sqlite3
-from aiogram import Bot, Dispatcher, types, F, Router
+from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
 from aiogram.filters.state import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, ContentType
+from aiogram.types import (
+    Message,
+    ReplyKeyboardMarkup,
+    KeyboardButton,
+    ContentType,
+)
 from configurations.keyboards import get_admin_keyboard
 from storage import admin_IDs
 import storage
@@ -111,13 +114,17 @@ def get_all_knowledge():
 
 
 # ==================== ФУНКЦИИ РАБОТЫ С GROQ API ====================
-client = Groq(api_key=os.environ.get("GROQ_KEY"))
 
 
-def ask_groq(question: str) -> str:
-    """Groq API через официальный SDK с данными из SQLite базы"""
+def ask_groq(question):
+    """Groq API через SDK OpenAI с данными из SQLite базы"""
 
     try:
+        client = OpenAI(
+            api_key=GROQ_KEY,
+            base_url="https://api.groq.com/openai/v1",
+        )
+
         # Получаем актуальные данные из базы
         knowledge_base = get_all_knowledge()
 
@@ -135,7 +142,7 @@ def ask_groq(question: str) -> str:
 Отвечай кратко и емко:"""
 
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",  # актуальная модель Groq
+            model="llama-3.1-8b-instant",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.1,
             max_tokens=500,
