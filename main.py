@@ -140,7 +140,7 @@ def ask_groq(question):
 """
 
         response = client.chat.completions.create(
-            model="llama3-8b-8192",
+            model="llama-3.1-8b-instant",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.1,
             max_tokens=500,
@@ -552,22 +552,6 @@ async def cancel_competitive_quiz_handler(message: types.Message, state: FSMCont
 # ==================== ОБРАБОТЧИК НЕИЗВЕСТНЫХ СООБЩЕНИЙ ====================
 
 
-@dp.message()
-async def unknown_message_handler(message: types.Message, state: FSMContext):
-    """Обработчик неизвестных сообщений."""
-    current_state = await state.get_state()
-
-    # Если пользователь в главном меню и пишет текст, предлагаем использовать кнопки
-    if current_state == ChatState.main_menu:
-        await message.answer(
-            "🤖 Для взаимодействия с ботом используйте кнопки меню ниже.\n\n"
-            "Если хотите задать вопрос ИИ, нажмите кнопку '🤖 Поговорить с ИИ'",
-            reply_markup=get_ai_chat_keyboard(),
-        )
-    else:
-        await unknown_message(message)
-
-
 # ==================== ФУНКЦИИ ЗАПУСКА И ОСТАНОВКИ ====================
 
 
@@ -589,45 +573,8 @@ async def main():
         await bot.session.close()
 
 
-def check_required_files():
-    """
-    Проверяет наличие всех необходимых файлов перед запуском бота.
-
-    Returns:
-        bool: True если все файлы присутствуют, False в противном случае
-    """
-    required_files = [
-        "config.py",
-        "storage.py",
-        "commands/start.py",
-        "commands/unknown_message.py",
-        "logs/logging_setup.py",
-        "user_panel/heroes.py",
-        "user_panel/information.py",
-        "user_panel/leaderboard.py",
-        "user_panel/quiz_handler.py",
-        "user_panel/hero_quiz_handler.py",
-    ]
-
-    missing_files = []
-
-    for file in required_files:
-        if not os.path.exists(file):
-            missing_files.append(file)
-
-    if missing_files:
-        logger.error("❌ Отсутствуют необходимые файлы:")
-        for file in missing_files:
-            logger.error(f"   - {file}")
-        return False
-
-    return True
-
-
 if __name__ == "__main__":
-    # Проверка файлов перед запуском
-    if not check_required_files():
-        exit(1)
+
 
     logger.info("Запуск бота...")
 
