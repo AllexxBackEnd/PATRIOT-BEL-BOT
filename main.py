@@ -1,6 +1,5 @@
-import asyncio
-import os
-from openai import OpenAI
+import asyncio         
+from openai import OpenAI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 import sqlite3
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
@@ -47,7 +46,6 @@ from user_panel.quiz_handler import (
     start_competitive_mode,
     start_practice_mode,
 )
-from groq import Groq
 
 # Настройка логирования
 logger = setup_logger()
@@ -57,6 +55,11 @@ bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 # ==================== СОСТОЯНИЯ ДЛЯ ИИ ЧАТА ====================
+
+client = OpenAI(
+  base_url="https://openrouter.ai/api/v1",
+  api_key="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",
+)
 
 
 class ChatState(StatesGroup):
@@ -68,7 +71,7 @@ class ChatState(StatesGroup):
 
 
 def init_database():
-    """Инициализация базы данных и создание таблицы, если её нет"""
+    """Инициализация базы данных и создание таблицы, если её нет."""
     try:
         conn = sqlite3.connect("knowledge_base.db")
         cursor = conn.cursor()
@@ -90,7 +93,7 @@ def init_database():
 
 
 def get_all_knowledge():
-    """Получение всей базы знаний из SQLite"""
+    """Получение всей базы знаний из SQLite."""
     try:
         conn = sqlite3.connect("knowledge_base.db")
         cursor = conn.cursor()
@@ -117,11 +120,8 @@ def get_all_knowledge():
 
 
 def ask_groq(question):
-    """Groq API c официальным SDK и данными из SQLite базы"""
-
+    """OpenRouter API c официальным SDK и данными из SQLite базы."""
     try:
-        client = Groq(api_key=GROQ_KEY)
-
         # Получаем актуальные данные из базы
         knowledge_base = get_all_knowledge()
 
@@ -133,23 +133,34 @@ def ask_groq(question):
 
 Вопрос: {question}
 
+На приветствия рассказывай о себе и предлагай помочь
 Если пользователь спрашивает информацию, относящуюся к истории, но информации нет в базе знаний, скажи "Простите, я не могу ответить на ваш вопрос. Пожалуйста, попробуйте переформулировать ваш вопрос и поробовать ещё раз!".
 Если вопрос не относится к истории, скажи "Прошу прощения, но я могу отвечать только на вопросы, связанные с героями ВОВ, в честь которых названы улицы г. Гродно. Хотите, раскажу вам о (Случайное имя из базы данных о героях)?".
 Не бойся выполнять дополнительные вычисления и/или действия, если это необходимо для ответа на вопрос.
 Отвечай кратко и емко:
 """
 
-        response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.1,
-            max_tokens=500,
-        )
+        completion = client.chat.completions.create(
+            extra_body={},
+            model="openai/gpt-3.5-turbo",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": prompt
+                        },
+                    ]
+                }
+                ]
+            )
+        print(completion.choices[0].message.content)
 
-        return response.choices[0].message.content
+        return completion.choices[0].message.content
 
     except Exception as e:
-        logger.error(f"Ошибка Groq API: {e}")
+        logger.error(f"Ошибка: {e}")
         return f"Ошибка при обращении к API: {e}"
 
 
@@ -157,7 +168,7 @@ def ask_groq(question):
 
 
 def get_ai_conversation_keyboard():
-    """Клавиатура во время чата с ИИ"""
+    """Клавиатура во время чата с ИИ."""
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="🔙 Вернуться в главное меню")],
