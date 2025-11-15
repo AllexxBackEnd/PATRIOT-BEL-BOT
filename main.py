@@ -58,7 +58,7 @@ dp = Dispatcher()
 
 client = OpenAI(
   base_url="https://openrouter.ai/api/v1",
-  api_key="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",
+  api_key=GROQ_KEY
 )
 
 
@@ -142,7 +142,7 @@ def ask_groq(question):
 
         completion = client.chat.completions.create(
             extra_body={},
-            model="openai/gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "user",
