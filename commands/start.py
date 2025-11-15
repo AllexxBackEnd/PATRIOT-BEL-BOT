@@ -11,16 +11,15 @@ logger = logging.getLogger("bot_logger")
 
 async def process_start_command(message: Message):
     """Обработчик команды /start."""
-
     # Регистрируем пользователя в системе
     storage.user_chat_ids.add(message.chat.id)
 
     logger.info(f"Новый пользователь: {message.chat.id}. "
                 f"Всего пользователей: {len(storage.user_chat_ids)}")
 
-    if message.chat_id not in storage.admin_IDs:
+    if message.chat.id not in storage.admin_IDs:
         await message.answer_photo(
-            photo="https://i.postimg.cc/Z5Gm3JZT/IMG-1540.jpg",
+            photo="https://i.postimg.cc/nc3m01gT/IMG-1791.jpg",
             caption=" Добро пожаловать в PATRIOT BOT!\n\n"
                     "📚 В этом боте ты узнаешь:\n"
                     "   • О героях, в честь кого названы улицы города Гродно\n"

@@ -7,7 +7,7 @@ async def show_main_menu(message: Message):
     """Возращение в главное меню."""
 
     await message.answer_photo(
-        photo="https://i.postimg.cc/Z5Gm3JZT/IMG-1540.jpg",
+        photo="https://i.postimg.cc/nc3m01gT/IMG-1791.jpg",
         caption=" Добро пожаловать в PATRIOT BOT!\n\n"
                 "📚 В этом боте ты узнаешь:\n"
                 "   • О героях, в честь кого названы улицы города Гродно\n"
